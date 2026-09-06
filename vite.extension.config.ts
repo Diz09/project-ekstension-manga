@@ -9,15 +9,24 @@ export default defineConfig({
 			},
 		}),
 	],
+
 	publicDir: false,
+
 	build:  {
 		outDir: 'public/extension',
 		emptyOutDir: true,
+
 		rollupOptions: {
 			input: 'resources/js/views/ekstention/popup.tsx',
+
 			output: {
 				entryFileNames: 'popup.js',
-				assetFileNames: 'assets/[name]/[extname]'
+				assetFileNames: (assetInfo) => {
+					if (assetInfo.name?.endsWith('.css')) {
+						return 'assets/extension.css';
+					}
+					return 'assets/[name]-[hash][extname]';
+				},
 			},
 		},
 	},

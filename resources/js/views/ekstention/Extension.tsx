@@ -5,55 +5,29 @@ export default function Extension() {
     const [active, setActive] = useState(true);
 
     const comics = [
-        {
-            id: 1,
-            name: 'One Piece',
-        },
-        {
-            id: 2,
-            name: 'Naruto',
-        },
-        {
-            id: 3,
-            name: 'Solo Leveling',
-        },
+        { id: 1, name: 'One Piece' },
+        { id: 2, name: 'Naruto' },
+        { id: 3, name: 'Solo Leveling' },
     ];
 
     return (
         <div className="extension">
-            <header className="extension-header">
+            <header className="header">
                 <div>
                     <h1>Manga Portal</h1>
-                    <p>Personal Manga Extension</p>
+                    <p>Personal comic gateway</p>
                 </div>
 
-                <button
-                    type="button"
-                    className="settings-button"
-                    aria-label="Pengaturan"
-                >
+                <button className="settings" type="button">
                     ⚙
                 </button>
             </header>
 
-            <section className="status-card">
-                <div className="status-information">
-                    <span className="status-label">
-                        Status Extension
-                    </span>
-
-                    <span
-                        className={
-                            active
-                                ? 'status-value active'
-                                : 'status-value inactive'
-                        }
-                    >
-                        <span className="status-indicator">
-                            ●
-                        </span>
-
-                        {active ? 'Aktif' : 'Nonaktif'}
+            <div className="status">
+                <div>
+                    <span className="status-title">Extension</span>
+                    <span className={`status-text ${active ? 'active' : ''}`}>
+                        ● {active ? 'Aktif' : 'Nonaktif'}
                     </span>
                 </div>
 
@@ -61,65 +35,54 @@ export default function Extension() {
                     type="button"
                     className={`toggle ${active ? 'active' : ''}`}
                     onClick={() => setActive(!active)}
-                    aria-label="Aktifkan atau nonaktifkan extension"
                 >
-                    <span className="toggle-circle" />
+                    <span />
                 </button>
-            </section>
+            </div>
 
             {active ? (
                 <>
-                    <section className="comic-section">
-                        <div className="section-header">
-                            <h2>Komik Tersimpan</h2>
+                    <div className="section-title">
+                        <h2>Komik Tersimpan</h2>
+                        <span>{comics.length}</span>
+                    </div>
 
-                            <span className="comic-count">
-                                {comics.length}
-                            </span>
-                        </div>
+                    <div className="comic-list">
+                        {comics.map((comic) => (
+                            <button
+                                type="button"
+                                className="comic"
+                                key={comic.id}
+                            >
+                                <span>{comic.name}</span>
+                                <span className="arrow">›</span>
+                            </button>
+                        ))}
+                    </div>
 
-                        <div className="comic-list">
-                            {comics.map((comic) => (
-                                <button
-                                    type="button"
-                                    key={comic.id}
-                                    className="comic-item"
-                                >
-                                    <span className="comic-name">
-                                        {comic.name}
-                                    </span>
-
-                                    <span className="comic-arrow">
-                                        ›
-                                    </span>
-                                </button>
-                            ))}
-                        </div>
-                    </section>
-
-                    <button
-                        type="button"
-                        className="add-url-button"
-                    >
-                        <span className="add-icon">＋</span>
-
-                        <span>Tambah URL Induk</span>
+                    <button type="button" className="add-button">
+                        + Tambah URL Induk
                     </button>
                 </>
             ) : (
-                <section className="inactive-message">
-                    <div className="inactive-icon">
-                        ◌
-                    </div>
-
+                <div className="inactive">
                     <h2>Extension Nonaktif</h2>
-
                     <p>
-                        Aktifkan extension untuk menggunakan
-                        fitur Manga Portal.
+                        Aktifkan extension untuk menggunakan Manga Portal.
                     </p>
-                </section>
+
+                    <button
+                        type="button"
+                        onClick={() => setActive(true)}
+                    >
+                        Aktifkan
+                    </button>
+                </div>
             )}
+
+            <footer>
+                Manga Portal · v1.0.0
+            </footer>
         </div>
     );
 }
