@@ -10,7 +10,8 @@
         "format:check": "prettier --check resources/",
         "lint": "eslint . --fix",
         "lint:check": "eslint .",
-        "types:check": "tsc --noEmit"
+        "types:check": "tsc --noEmit",
+        "extension:build": "vite build --config vite.extension.config.ts"
     },
     "devDependencies": {
         "@eslint/js": "^9.19.0",

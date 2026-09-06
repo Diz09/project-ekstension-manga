@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "Manga Extension",
+    "version": "1.0.0",
+    "description": "Personal manga portal browser extension.",
+    "action": {
+        "default_title": "Manga Extension",
+        "default_popup": "popup.html"
+    },
+    "permissions": [
+        "storage"
+    ]
+}

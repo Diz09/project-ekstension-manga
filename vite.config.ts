@@ -5,11 +5,15 @@ import react from '@vitejs/plugin-react';
 import laravel from 'laravel-vite-plugin';
 import { bunny } from 'laravel-vite-plugin/fonts';
 import { defineConfig } from 'vite';
+import { resolve } from 'node:path';
 
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.tsx'],
+            input: [
+                'resources/css/app.css',
+                'resources/js/app.tsx'
+            ],
             refresh: true,
             fonts: [
                 bunny('Instrument Sans', {
@@ -28,4 +32,15 @@ export default defineConfig({
             formVariants: true,
         }),
     ],
+    build: {
+        rollupOptions: {
+            input: {
+                app: resolve(__dirname, 'resources/js/app.tsx'),
+                extension: resolve(
+                    __dirname,
+                    'resources/js/views/ekstention/popup.html',
+                ),
+            },
+        },
+    },
 });
