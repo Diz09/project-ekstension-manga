@@ -1,60 +1,38 @@
-#!/bin/bash
+FROM php:8.3-apache
 
-cd /var/www/html
+# Combined update, installation, configuration, and extension setup in one layer
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    curl \
+    unzip \
+    zip \
+    libzip-dev \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) \
+    pdo \
+    pdo_mysql \
+    zip \
+    gd \
+    && apt-get clean && rm -rf /var/www/html/* /var/lib/apt/lists/*
 
-echo "Menjalankan container Laravel..."
+# Copy Composer from the official image
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-cd /var/www/html
+# Enable Apache modules
+RUN a2enmod rewrite
 
-echo "Menunggu project mount..."
+# Setup VirtualHost configuration
+COPY docker/php/apache.conf /etc/apache2/sites-available/000-default.conf
 
-# until [ -f artisan ]; do
-#     echo "Project belum siap..."
-#     sleep 1
-# done
+WORKDIR /var/www/html
 
-php artisan migrate --force || true
+# Setup the starter script
+COPY docker/php/start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
 
-if [ ! -f .env ]; then
-    echo ".env tidak ditemukan, membuat dari .env.example"
-    cp .env.example .env
-else
-    echo ".env ditemukan"
-fi
-
-if [ ! -d vendor ]; then
-    echo "Vendor tidak ditemukan, menjalankan composer install..."
-    composer install
-fi
-
-if ! grep -q "^APP_KEY=base64:" .env; then
-    echo "APP_KEY belum ada, generate key..."
-    php artisan key:generate
-fi
-
-echo "Membersihkan cache Laravel..."
-
-php artisan config:clear
-php artisan cache:clear
-php artisan route:clear
-php artisan view:clear
-
-echo "Menunggu database siap..."
-
-until php artisan migrate --force; do
-  echo "Database belum siap, tunggu 3 detik..."
-  sleep 3
-done
-
-# echo "Mengatur permission..."
-
-# chown -R www-data:www-data storage bootstrap/cache
-# chmod -R 775 storage bootstrap/cache
-
-echo "Mengatur permission..."
-
-chmod -R 775 storage bootstrap/cache || true
-
-echo "Menjalankan Apache..."
-
-apache2-foreground
+CMD ["start.sh"]
