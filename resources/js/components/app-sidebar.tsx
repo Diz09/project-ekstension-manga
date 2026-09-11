@@ -22,6 +22,11 @@ const mainNavItems: NavItem[] = [
         href: dashboard(),
         icon: LayoutGrid,
     },
+    {
+        title: 'Komik',
+        href: '/komik',
+        icon: BookOpen,
+    },
 ];
 
 const footerNavItems: NavItem[] = [

@@ -38,7 +38,7 @@ export default defineConfig({
                 app: resolve(__dirname, 'resources/js/app.tsx'),
                 extension: resolve(
                     __dirname,
-                    'resources/js/views/ekstention/popup.html',
+                    'resources/js/pages/ekstention/popup.html',
                 ),
             },
         },
